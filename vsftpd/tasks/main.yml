@@ -1,0 +1,53 @@
+- hosts: 192.168.122.79
+  vars:
+          vsftpd_paquetes:
+                  - vsftpd
+                  - libsemanage-python
+                  - libselinux-python
+
+          vsftpd_config_file: /etc/vsftpd/vsftpd.conf
+          vsftpd_userlist_file: /etc/vsftpd/vsftpd.userlist
+          vsftpd_service: 
+                  - vsftpd.service
+  remote_user: root
+ 
+  tasks:
+    
+    - name: Instalando el servicio de  vsftp
+      package:
+              name: '{{ vsftpd_paquetes }}'
+              state: present
+    
+    - include_tasks: selinux.yml
+
+    
+    - name: Cargando Archivo de configuracion VSFTPD
+      template:
+              src: etc_vsftpd_vsftpd.conf.j2
+              dest: "{{ vsftpd_config_file }}"
+              mode: '0600' 
+
+    - name: Cargando usuarios permitidos 
+      template:
+              src: etc_vsftpd_vsftpd.userlist.j2
+              dest: "{{ vsftpd_userlist_file }}"
+      ##
+      #Starting the service
+      ##
+      
+    - name: Restart VSFTPD service
+      shell: |
+              systemctl restart vsftpd.service
+              systemctl enable vsftpd.service
+      ##
+      #Seting up the firewall
+      ##
+    - name: Config Firewalld
+      shell: |
+              firewall-cmd --add-service=ftp --permanent
+              firewall-cmd --port-add=20/tcp --permanent
+              firewall-cmd --port-add=2i/tcp --permanent
+              firewall-cmd --reload
+
+- import_playbook: usr.yml    
+...

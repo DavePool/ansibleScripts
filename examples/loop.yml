@@ -1,0 +1,19 @@
+---
+- hosts: 192.168.122.79
+
+
+  tasks:
+
+          - name: Añadiendo Varios usuarios 
+            user:
+                    name : "{{ item.name }}"
+                    state: present
+                    password: $6$gHd8i7TculyF6gae$8fxNFCUM3lPFL0xNpKGy.2O9Wp3TAB13Cz213r3GoFwu8gde.pMgjJlPhxuiQWS2naXboDX3jDycGC2dnRBay0
+                    groups: administrativos
+                    home: /home/compartido/.//{{ item.name }}
+            loop:
+                    - { name: 'kevin' }
+                    - { name: 'erwing' }
+                    - { name: 'isaias' }
+         
+...

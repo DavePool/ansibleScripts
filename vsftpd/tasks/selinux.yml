@@ -1,0 +1,10 @@
+---
+- name: permitiendo acceso completo para leer/escribir
+  seboolean:
+          name: ftpd_full_access
+          state: yes
+          persistent: yes
+
+
+
+...

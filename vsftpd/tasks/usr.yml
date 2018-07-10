@@ -1,0 +1,46 @@
+---
+- hosts: 192.168.122.79
+
+  tasks:
+          - name: Creando grupo administrativos
+            group:
+                    name: administrativos
+                    state: present
+
+
+          - name: Creando grupo Desarrolladores
+            group:
+                    name: desarrolladores
+                    state: present
+
+          - name: Creando el directorio a compartir
+            shell: |
+                    mkdir -p /home/compartido/david
+                    chmod a-w /home/compartido
+                    chown ftp:administrativos /home/compartido
+
+          - name: Creando usuarios admidministrativos
+            user:
+                    name: "{{ item.name }}"
+                    state: present
+                    password: $6$gHd8i7TculyF6gae$8fxNFCUM3lPFL0xNpKGy.2O9Wp3TAB13Cz213r3GoFwu8gde.pMgjJlPhxuiQWS2naXboDX3jDycGC2dnRBay0
+                    shell: /bin/bash
+                    groups: administrativos
+                    home: /home/compartido/./{{ item.name }}
+            loop:
+                    - { name: 'isaias' }
+                    - { name: 'kevin'  }
+                    - { name: 'erwing' }
+                            
+          - name: Creando Usuarios desarrolladores
+            user:
+                    name: "{{ item.name }}"
+                    state: present
+                    password: $6$gHd8i7TculyF6gae$8fxNFCUM3lPFL0xNpKGy.2O9Wp3TAB13Cz213r3GoFwu8gde.pMgjJlPhxuiQWS2naXboDX3jDycGC2dnRBay0
+                    shell: /bin/bash
+                    groups: desarrolladores
+            loop:
+                    - {name: 'pacheco' }
+                    - {name: 'christian' }
+                    
+...
