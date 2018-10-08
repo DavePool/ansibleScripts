@@ -1,4 +1,4 @@
-firewall-ports:
+list_of_ports:
         - 22/tcp
         - 80/tcp
         - 443/tcp
@@ -13,3 +13,11 @@ firewall-ports:
         - 67/udp
         - 68/udp
         - 69/udp
+
+list_of_services:
+        - http
+        - https
+        - dhcp
+        - tftp
+        - dns
+        - ssh
