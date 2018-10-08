@@ -1,0 +1,18 @@
+---
+#task for setup the firewall ports and services
+#
+
+- name: "Include firewall.yml"
+  include_vars: "vars/firewall.yml"
+  tags: 
+     - "firewall"
+
+- name: "Opening firewalld ports"
+  become: True
+  firewalld:
+          permanent: True
+          immediate: True
+          port: "{{ item }}"
+          state: enabled
+  with_items: "firewall-ports"
+  ignore_errors: "yes"
