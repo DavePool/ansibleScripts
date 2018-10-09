@@ -2,10 +2,15 @@
 
 - hosts: all
 
+  vars_prompt:
+          - name: "ip"
+            prompt: "introduce your ip "
+            private: no
+
   tasks:
           - name: seting up the /etc/hosts file
             shell: |
-                    ip=$(ip a | grep '[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}' | awk '{print $2}' | tail -n 1 | cut -c 1-11)
+                    #                    ip=$(ip a | grep '[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}' | awk '{print $2}' | tail -n 1 | cut -d/ -f1)
                     hostname=$(hostname)
-                    echo $ip $hostname >> /etc/hosts
+                    echo "{{ ip }}" $hostname >> /etc/hosts
 
