@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+
+  tasks:
+          - name: seting up the /etc/hosts file
+            shell: |
+                    ip=$(ip a | grep '[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}.[0-9]\{1,3\}' | awk '{print $2}' | tail -n 1 | cut -c 1-11)
+                    hostname=$(hostname)
+                    echo $ip $hostname >> /etc/hosts
+
