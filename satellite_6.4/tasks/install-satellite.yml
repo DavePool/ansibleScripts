@@ -1,0 +1,46 @@
+---
+
+- hosts: all
+
+  vars_prompt:
+          - name: "organization_name"
+            prompt: "Enter your organization name"
+            private: no
+          - name: "location"
+            prompt: "Enter your initial location"
+            private: no
+          - name: "admin_user"
+            prompt: "Enter the admin user name"
+            private: no
+          - name: "admin_password"
+            prompt: "Enter the password for the admin user"
+            private: yes
+
+  tasks:
+
+          - name: yum upgrade
+            yum:
+                    name: "*"
+                    state: latest
+            tags:
+                    - upgrade
+
+
+          - name: download satelite from network
+            yum:
+                    name: satellite
+                    state: installed
+            tags: 
+                    - download
+
+          - name: install satellite
+            shell: |
+                    satellite-installer --scenario satellite \ 
+                    --foreman-initial-organization "{{ organization_name }}" \ 
+                    --foreman-initial-location "{{ location }}" \ 
+                    --foreman-admin-username "{{ admin_user }}" \ 
+                    --foreman-admin-password "{{ admin_password }}" \ 
+                    --foreman-proxy-dns-managed=false \ 
+                    --foreman-proxy-dhcp-managed=false
+            tags:
+                    - install
